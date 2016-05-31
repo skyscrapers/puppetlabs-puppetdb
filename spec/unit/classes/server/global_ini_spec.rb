@@ -15,13 +15,18 @@ describe 'puppetdb::server::global', :type => :class do
       it { should contain_ini_setting('puppetdb_global_vardir').
         with(
           'ensure' => 'present',
-          'path' => 'opt/puppetlabs/server/data/puppetdb',
           'path' => '/etc/puppetlabs/puppetdb/conf.d/config.ini',
           'section' => 'global',
           'setting' => 'vardir',
           'value' => '/opt/puppetlabs/server/data/puppetdb'
       )}
-
+      it { should contain_file('/etc/puppetlabs/puppetdb/conf.d/config.ini').
+        with(
+             'ensure'  => 'file',
+             'owner'   => 'puppetdb',
+             'group'   => 'puppetdb',
+             'mode'    => '0600'
+      )}
     end
 
     describe 'when using a legacy puppetdb version' do
@@ -29,7 +34,6 @@ describe 'puppetdb::server::global', :type => :class do
       it {should contain_ini_setting('puppetdb_global_vardir').
         with(
           'ensure' => 'present',
-          'path' => 'opt/puppetlabs/server/data/puppetdb',
           'path' => '/etc/puppetdb/conf.d/config.ini',
           'section' => 'global',
           'setting' => 'vardir',
